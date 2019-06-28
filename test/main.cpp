@@ -7,5 +7,4 @@ int main()
 {
     Print();
     return 0;
-    
 }
