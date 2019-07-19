@@ -1,3 +1,5 @@
+//实现strassen矩阵相乘的算法
+//edition:1.0 aurthor:mubai time：2019年07月18日11:23:05
 #include "iostream"
 #include "math.h"
 #include "assert.h"
@@ -6,12 +8,12 @@ class Matrix{
 public:
 	Matrix(int n);
 	Matrix();
-	Matrix(Matrix &copy);
+	Matrix(const Matrix &copy);
 	~Matrix();
-	Matrix operator +(const Matrix &c);
-	Matrix operator -(const Matrix &c);
-	Matrix operator *(const Matrix &c);
-	Matrix operator =(const Matrix &c);
+	Matrix operator +(const Matrix& c);
+	Matrix operator -(const Matrix& c);
+	Matrix operator *(const Matrix& c);
+	Matrix operator =(const Matrix& c);
 	void Assign(Matrix &matrix,int start_x,int start_y,int end_x,int end_y)const; 
 	void Combine(Matrix &matrix,int start_x,int start_y,int end_x,int end_y);
 	void Show()const;
@@ -51,9 +53,13 @@ Matrix::Matrix(int n)
 	}
 	dimension=n;
 }
-Matrix::Matrix(Matrix &copy)
+Matrix::Matrix(const Matrix &copy)
 {
-	assert(dimension==copy.dimension);
+	dimension=copy.dimension;
+	matrix=new int*[dimension];
+	for(int i=0;i<dimension;i++){
+		matrix[i]=new int[dimension];
+	}
 
 	for(int i=0;i<dimension;i++){
 		for(int j=0;j<dimension;j++){
@@ -63,14 +69,15 @@ Matrix::Matrix(Matrix &copy)
 }
 Matrix::~Matrix()
 {
-	for(int i=0;i<dimension;i++){
+	int i=0;
+	for(i=0;i<dimension;i++){
 		delete[] matrix[i];
 		matrix[i]=NULL;
 	}
 	matrix=NULL;
 }
 
-Matrix Matrix::operator =(const Matrix &c)
+Matrix Matrix::operator =(const Matrix& c)
 {
 	assert(dimension==c.dimension);
 
@@ -81,7 +88,7 @@ Matrix Matrix::operator =(const Matrix &c)
 	}
 }
 
-Matrix Matrix::operator +(const Matrix &c)
+Matrix Matrix::operator +(const Matrix& c)
 {
 	Matrix result(dimension);
 	for(int i=0;i<dimension;i++){
@@ -91,7 +98,7 @@ Matrix Matrix::operator +(const Matrix &c)
 	}
 	return result;
 }
-Matrix Matrix::operator -(const Matrix &c)
+Matrix Matrix::operator -(const Matrix& c)
 {
 	assert(dimension==c.dimension);
 	Matrix result(dimension);
@@ -102,7 +109,7 @@ Matrix Matrix::operator -(const Matrix &c)
 	}	
 	return result;
 }
-Matrix Matrix::operator *(const Matrix &c)
+Matrix Matrix::operator *(const Matrix& c)
 {
 	assert(dimension==c.dimension);
 	Matrix result(dimension);
